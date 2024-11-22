@@ -1,0 +1,132 @@
+using System;
+using System.Collections.Generic;
+
+class User
+{
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public string PhoneNumber { get; set; }
+
+    public void DisplayDetails()
+    {
+        Console.WriteLine($"Name: {FirstName} {LastName}, Phone: {PhoneNumber}");
+    }
+}
+
+class Contact
+{
+    private List<User> contacts = new List<User>();
+
+    public void AddContact(string firstName, string lastName, string phoneNumber)
+    {
+        contacts.Add(new User { FirstName = firstName, LastName = lastName, PhoneNumber = phoneNumber });
+        Console.WriteLine("Contact added successfully!");
+    }
+
+    public void EditContact(string phoneNumber)
+    {
+        var contact = contacts.Find(c => c.PhoneNumber == phoneNumber);
+        if (contact != null)
+        {
+            Console.WriteLine("Enter new first name:");
+            contact.FirstName = Console.ReadLine();
+            Console.WriteLine("Enter new last name:");
+            contact.LastName = Console.ReadLine();
+            Console.WriteLine("Enter new phone number:");
+            contact.PhoneNumber = Console.ReadLine();
+            Console.WriteLine("Contact updated successfully!");
+        }
+        else
+        {
+            Console.WriteLine("Contact not found!");
+        }
+    }
+
+    public void DeleteContact(string phoneNumber)
+    {
+        var contact = contacts.Find(c => c.PhoneNumber == phoneNumber);
+        if (contact != null)
+        {
+            contacts.Remove(contact);
+            Console.WriteLine("Contact deleted successfully!");
+        }
+        else
+        {
+            Console.WriteLine("Contact not found!");
+        }
+    }
+
+    public void DisplayAllContacts()
+    {
+        if (contacts.Count > 0)
+        {
+            Console.WriteLine("Contacts List:");
+            foreach (var contact in contacts)
+            {
+                contact.DisplayDetails();
+            }
+        }
+        else
+        {
+            Console.WriteLine("No contacts available.");
+        }
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        Contact contactManager = new Contact();
+        int choice;
+
+        do
+        {
+            Console.WriteLine("\nContact Management System");
+            Console.WriteLine("1. Add Contact");
+            Console.WriteLine("2. Edit Contact");
+            Console.WriteLine("3. Delete Contact");
+            Console.WriteLine("4. Show All Contacts");
+            Console.WriteLine("5. Exit");
+            Console.Write("Enter your choice: ");
+            choice = int.Parse(Console.ReadLine());
+
+            switch (choice)
+            {
+                case 1:
+                    Console.Write("Enter first name: ");
+                    string firstName = Console.ReadLine();
+                    Console.Write("Enter last name: ");
+                    string lastName = Console.ReadLine();
+                    Console.Write("Enter phone number: ");
+                    string phoneNumber = Console.ReadLine();
+                    contactManager.AddContact(firstName, lastName, phoneNumber);
+                    break;
+
+                case 2:
+                    Console.Write("Enter the phone number of the contact to edit: ");
+                    string editPhone = Console.ReadLine();
+                    contactManager.EditContact(editPhone);
+                    break;
+
+                case 3:
+                    Console.Write("Enter the phone number of the contact to delete: ");
+                    string deletePhone = Console.ReadLine();
+                    contactManager.DeleteContact(deletePhone);
+                    break;
+
+                case 4:
+                    contactManager.DisplayAllContacts();
+                    break;
+
+                case 5:
+                    Console.WriteLine("Exiting program...");
+                    break;
+
+                default:
+                    Console.WriteLine("Invalid choice. Please try again.");
+                    break;
+            }
+        } while (choice != 5);
+    }
+}
